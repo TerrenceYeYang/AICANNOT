@@ -2,7 +2,7 @@
 
 export const LIMITS = {
   titleMin: 3,
-  titleMax: 200,
+  titleMax: 600,
   bodyMax: 5000,
   answerMin: 1,
   answerMax: 5000,

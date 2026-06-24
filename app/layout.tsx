@@ -3,6 +3,7 @@ import Link from "next/link";
 import "./globals.css";
 import { getCurrentUser, identityDef } from "@/lib/auth";
 import { logoutAction } from "@/lib/actions";
+import SignOutButton from "@/app/_components/SignOutButton";
 
 export const metadata: Metadata = {
   title: "Things AI Can't Do",
@@ -30,9 +31,7 @@ async function HeaderAuth() {
         <span className="badge">{def?.emoji}</span> {user.username}
       </span>
       <form action={logoutAction}>
-        <button type="submit" className="btn">
-          Sign out
-        </button>
+        <SignOutButton />
       </form>
     </div>
   );
