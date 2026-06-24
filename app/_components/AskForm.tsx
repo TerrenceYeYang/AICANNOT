@@ -40,12 +40,12 @@ export default function AskForm({
 
       <div>
         <label htmlFor="title">What can&apos;t AI do?</label>
-        <textarea
+        <input
           id="title"
           name="title"
-          rows={2}
-          maxLength={600}
-          placeholder="e.g. Count the letters in a word reliably — or paste the full prompt it fails on"
+          type="text"
+          maxLength={200}
+          placeholder="e.g. Count the letters in a word reliably"
           required
         />
       </div>
@@ -55,7 +55,7 @@ export default function AskForm({
           id="body"
           name="body"
           rows={3}
-          placeholder="Describe what you tried and where it failed."
+          placeholder="Describe what you tried and where it failed. Paste the full prompt here if it's long."
         />
       </div>
 
