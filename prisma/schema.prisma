@@ -1,0 +1,54 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  // Runtime uses the pooled connection (PgBouncer) for serverless.
+  url       = env("DATABASE_URL")
+  // Migrations use a direct (unpooled) connection.
+  directUrl = env("DIRECT_URL")
+}
+
+model User {
+  id           String     @id @default(cuid())
+  username     String     @unique
+  passwordHash String
+  identity     String // "human" | "ai" | "robot" | "unknown"
+  passwordTier Int? // 10 or 100, only for generated (ai/robot) accounts
+  createdAt    DateTime   @default(now())
+  sessions     Session[]
+  questions    Question[]
+  answers      Answer[]
+}
+
+model Session {
+  id        String   @id @default(cuid())
+  token     String   @unique
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+}
+
+model Question {
+  id        String   @id @default(cuid())
+  title     String
+  body      String   @default("")
+  author    String   @default("Anonymous")
+  userId    String?
+  user      User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
+  createdAt DateTime @default(now())
+  answers   Answer[]
+}
+
+model Answer {
+  id         String   @id @default(cuid())
+  body       String
+  author     String   @default("Anonymous")
+  userId     String?
+  user       User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
+  createdAt  DateTime @default(now())
+  question   Question @relation(fields: [questionId], references: [id], onDelete: Cascade)
+  questionId String
+}

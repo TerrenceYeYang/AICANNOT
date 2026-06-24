@@ -1,0 +1,274 @@
+:root {
+  --bg: #0b0d12;
+  --panel: #151922;
+  --panel-2: #1c2230;
+  --border: #283044;
+  --text: #e7ecf3;
+  --muted: #93a0b4;
+  --accent: #6ea8fe;
+  --accent-strong: #4d8bff;
+  --danger: #ff6b6b;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto,
+    Helvetica, Arial, sans-serif;
+  line-height: 1.55;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.container {
+  width: 100%;
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+a {
+  color: var(--accent);
+  text-decoration: none;
+}
+a:hover {
+  text-decoration: underline;
+}
+
+.site-header {
+  border-bottom: 1px solid var(--border);
+  background: rgba(11, 13, 18, 0.8);
+  backdrop-filter: blur(8px);
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+.header-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 64px;
+}
+.brand {
+  font-weight: 700;
+  font-size: 18px;
+  color: var(--text);
+}
+.brand:hover {
+  text-decoration: none;
+  color: var(--accent);
+}
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.header-actions form {
+  margin: 0;
+}
+.user-chip {
+  font-size: 14px;
+  color: var(--text);
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.badge {
+  font-size: 15px;
+  line-height: 1;
+}
+
+/* Honeypot: kept in the layout (not display:none, which some bots skip) but
+   off-screen and out of the tab order so humans never see or focus it. */
+.hp-field {
+  position: absolute;
+  left: -9999px;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+  pointer-events: none;
+}
+
+main.container {
+  flex: 1;
+  padding-top: 32px;
+  padding-bottom: 64px;
+}
+
+.site-footer {
+  border-top: 1px solid var(--border);
+  color: var(--muted);
+  font-size: 14px;
+  padding: 24px 0;
+}
+
+.hero h1 {
+  font-size: 30px;
+  margin: 0 0 8px;
+  letter-spacing: -0.02em;
+}
+.hero p {
+  color: var(--muted);
+  margin: 0 0 28px;
+}
+
+.section-title {
+  font-size: 14px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--muted);
+  margin: 36px 0 14px;
+}
+
+.card {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 18px 20px;
+}
+
+.q-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.q-item {
+  display: block;
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 16px 20px;
+  transition: border-color 0.15s ease, transform 0.05s ease;
+}
+.q-item:hover {
+  text-decoration: none;
+  border-color: var(--accent);
+}
+.q-item h3 {
+  margin: 0 0 6px;
+  font-size: 17px;
+  color: var(--text);
+}
+.q-meta {
+  font-size: 13px;
+  color: var(--muted);
+  display: flex;
+  gap: 12px;
+}
+.q-body-preview {
+  color: var(--muted);
+  font-size: 14px;
+  margin: 8px 0 0;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.empty {
+  color: var(--muted);
+  font-style: italic;
+}
+
+form.stack {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+label {
+  font-size: 13px;
+  color: var(--muted);
+  margin-bottom: 4px;
+  display: block;
+}
+input[type="text"],
+textarea {
+  width: 100%;
+  background: var(--panel-2);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  color: var(--text);
+  padding: 10px 12px;
+  font: inherit;
+  resize: vertical;
+}
+input[type="text"]:focus,
+textarea:focus {
+  outline: none;
+  border-color: var(--accent);
+}
+
+.btn {
+  display: inline-block;
+  border: 1px solid var(--border);
+  background: var(--panel-2);
+  color: var(--text);
+  border-radius: 8px;
+  padding: 9px 16px;
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+  align-self: flex-start;
+}
+.btn:hover {
+  text-decoration: none;
+  border-color: var(--accent);
+}
+.btn-primary {
+  background: var(--accent-strong);
+  border-color: var(--accent-strong);
+  color: #fff;
+}
+.btn-primary:hover {
+  background: var(--accent);
+  border-color: var(--accent);
+}
+
+.back-link {
+  font-size: 14px;
+  display: inline-block;
+  margin-bottom: 16px;
+}
+
+.question-detail h1 {
+  font-size: 26px;
+  margin: 0 0 10px;
+  letter-spacing: -0.01em;
+}
+.question-detail .body {
+  color: var(--text);
+  white-space: pre-wrap;
+}
+
+.answer-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.answer {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--accent-strong);
+  border-radius: 10px;
+  padding: 14px 18px;
+}
+.answer .body {
+  white-space: pre-wrap;
+}
+.answer .meta {
+  font-size: 12px;
+  color: var(--muted);
+  margin-top: 8px;
+}
