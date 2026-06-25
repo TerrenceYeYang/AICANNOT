@@ -1,5 +1,9 @@
 # Things AI Can't Do
 
+Live site: <https://thingsaicantdo.vercel.app/>
+
+<img src="./assets/live-site-preview.png" alt="Things AI Can't Do live site preview" width="860">
+
 A community catalog of things AI can't do. Anyone can ask a question, anyone can answer.
 
 ## Stack
