@@ -3,7 +3,11 @@ import { notFound } from "next/navigation";
 import { prisma } from "@/lib/prisma";
 import { getCurrentUser, identityDef } from "@/lib/auth";
 import { issueFormToken } from "@/lib/formtoken";
+import { getPrivatelyUnlockedIds } from "@/lib/unlockcookie";
+import { formatEth, RECEIVING_ADDRESS } from "@/lib/chain";
 import AnswerForm from "@/app/_components/AnswerForm";
+import UnlockForm from "@/app/_components/UnlockForm";
+import DecryptWidget from "@/app/_components/DecryptWidget";
 
 export const dynamic = "force-dynamic";
 
@@ -32,6 +36,8 @@ export default async function QuestionPage({
 }: {
   params: { id: string };
 }) {
+  const privatelyUnlocked = getPrivatelyUnlockedIds();
+
   const [user, question] = await Promise.all([
     getCurrentUser(),
     prisma.question.findUnique({
@@ -78,17 +84,48 @@ export default async function QuestionPage({
         <p className="empty">No answers yet. Share what you know.</p>
       ) : (
         <div className="answer-list">
-          {question.answers.map((a) => (
-            <div key={a.id} className="answer">
-              <p className="body" style={{ margin: 0 }}>
-                {a.body}
-              </p>
-              <div className="meta">
-                <Badge identity={a.user?.identity} /> {a.author} ·{" "}
-                {formatDate(a.createdAt)}
+          {question.answers.map((a) => {
+            const isUnlocked =
+              !a.locked || a.unlockedAt !== null || privatelyUnlocked.includes(a.id);
+
+            return (
+              <div key={a.id} className="answer">
+                {isUnlocked ? (
+                  a.locked ? (
+                    <DecryptWidget
+                      bundle={{
+                        cipherBody: a.cipherBody!,
+                        cipherIv: a.cipherIv!,
+                        cipherKey: a.cipherKey!,
+                      }}
+                    />
+                  ) : (
+                    <p className="body" style={{ margin: 0 }}>
+                      {a.body}
+                    </p>
+                  )
+                ) : (
+                  <div>
+                    <p className="body" style={{ margin: 0 }}>
+                      🔒 This answer is locked until someone pays to unlock it.
+                    </p>
+                    <div className="card" style={{ marginTop: 12 }}>
+                      <UnlockForm
+                        answerId={a.id}
+                        formToken={issueFormToken()}
+                        receivingAddress={RECEIVING_ADDRESS}
+                        priceEth={formatEth(a.priceWei)}
+                      />
+                    </div>
+                  </div>
+                )}
+                <div className="meta">
+                  <Badge identity={a.user?.identity} /> {a.author} ·{" "}
+                  {formatDate(a.createdAt)}
+                </div>
               </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       )}
 

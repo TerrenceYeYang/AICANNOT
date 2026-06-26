@@ -51,4 +51,36 @@ model Answer {
   createdAt  DateTime @default(now())
   question   Question @relation(fields: [questionId], references: [id], onDelete: Cascade)
   questionId String
+
+  // --- pay-to-unlock ---
+  // When locked, `body` is empty and the real content lives only in the
+  // ciphertext fields below, encrypted client-side by the author before it
+  // ever reaches the server. The server never sees plaintext and never
+  // holds the RSA private key needed to decrypt it.
+  locked       Boolean  @default(false)
+  priceWei     String? // required payment amount, wei as a decimal string
+  publicKeyPem String? // author's RSA-OAEP public key (informational/display)
+  cipherBody   String? // base64 AES-GCM ciphertext of the real answer body
+  cipherIv     String? // base64 AES-GCM IV
+  cipherKey    String? // base64 RSA-OAEP-wrapped AES content key
+  unlockedAt   DateTime? // set once a "public" unlock succeeds
+  unlockScope  String? // "public" | "private", mirrors unlockedAt
+
+  unlocks AnswerUnlock[]
+}
+
+// Append-only ledger of verified on-chain payments. Also the replay guard:
+// a unique txHash means one transaction can unlock at most one answer.
+model AnswerUnlock {
+  id          String   @id @default(cuid())
+  answer      Answer   @relation(fields: [answerId], references: [id], onDelete: Cascade)
+  answerId    String
+  txHash      String   @unique
+  chainId     Int
+  fromAddress String
+  amountWei   String
+  scope       String // "public" | "private"
+  createdAt   DateTime @default(now())
+
+  @@index([answerId])
 }
